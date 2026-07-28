@@ -62,11 +62,8 @@ export function Works() {
   const springY = useSpring(mouseY, { stiffness: 150, damping: 20 })
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      mouseX.set(e.clientX - rect.left)
-      mouseY.set(e.clientY - rect.top)
-    }
+    mouseX.set(e.clientX)
+    mouseY.set(e.clientY)
   }
 
   return (
@@ -136,18 +133,18 @@ export function Works() {
 
         {/* Floating Image Preview */}
         <motion.div
-          className="absolute pointer-events-none z-50 w-72 h-48 md:w-96 md:h-60 overflow-hidden rounded-xl border border-white/20 bg-black/90 backdrop-blur-md shadow-2xl"
+          className="fixed pointer-events-none z-[9999] w-72 h-44 md:w-96 md:h-56 overflow-hidden rounded-xl border border-white/30 bg-black/90 backdrop-blur-md shadow-2xl"
           style={{
-            x: springX,
-            y: springY,
-            translateX: "-50%",
-            translateY: "-260%",
+            left: springX,
+            top: springY,
+            translateX: "24px",
+            translateY: "-50%",
           }}
           animate={{
             opacity: hoveredIndex !== null ? 1 : 0,
             scale: hoveredIndex !== null ? 1 : 0.8,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.15 }}
         >
           {hoveredIndex !== null && (
             <>
