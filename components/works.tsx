@@ -7,10 +7,11 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 
 const projects = [
   {
-    title: "Multilingual RAG Q&A Bot",
-    tags: ["LangChain", "RAG", "NLP", "Python", "Generative AI"],
+    title: "Marginal: AI Research Paper Reader",
+    tags: ["FastAPI", "Python", "NLP", "RAG", "Uvicorn"],
     image: "/abstract-memory-storage-visualization.jpg",
     year: "2026",
+    href: "https://marginal-paper-reader.onrender.com/",
   },
   {
     title: "Healthcare Diagnosis Chatbot",
@@ -96,7 +97,9 @@ export function Works() {
             onMouseLeave={() => setHoveredIndex(null)}
           >
             <a
-              href="#"
+              href={project.href || "#"}
+              target={project.href ? "_blank" : undefined}
+              rel={project.href ? "noopener noreferrer" : undefined}
               data-cursor-hover
               className="group flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
