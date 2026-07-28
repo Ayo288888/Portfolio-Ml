@@ -54,7 +54,7 @@ export function Navbar() {
           </a>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link, index) => (
               <li key={link.label}>
                 <button
