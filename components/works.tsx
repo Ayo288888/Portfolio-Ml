@@ -7,28 +7,46 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 
 const projects = [
   {
-    title: "Neural Interface",
-    tags: ["Next.js", "OpenAI", "WebGL"],
-    image: "/abstract-neural-network-visualization-dark-theme.jpg",
-    year: "2024",
-  },
-  {
-    title: "Quantum Dashboard",
-    tags: ["React", "D3.js", "Python"],
+    title: "PhishGuard: Phishing Detector",
+    tags: ["Python", "XGBoost", "NLP", "Cybersecurity"],
     image: "/futuristic-data-dashboard-dark-minimal.jpg",
-    year: "2024",
+    year: "2026",
   },
   {
-    title: "Synthetic Memory",
-    tags: ["TypeScript", "LangChain", "Vector DB"],
+    title: "Deepfake Security System",
+    tags: ["PyTorch", "YOLO", "Wav2Vec2", "EfficientNet"],
+    image: "/abstract-neural-network-visualization-dark-theme.jpg",
+    year: "2026",
+  },
+  {
+    title: "Multilingual RAG Q&A Bot",
+    tags: ["LangChain", "RAG", "Python", "Next.js"],
     image: "/abstract-memory-storage-visualization.jpg",
-    year: "2023",
+    year: "2026",
   },
   {
-    title: "Echo Protocol",
-    tags: ["Rust", "WebAssembly", "Audio"],
+    title: "KITTI Object Detection",
+    tags: ["PyTorch", "Faster R-CNN", "KITTI", "OpenCV"],
+    image: "/futuristic-data-dashboard-dark-minimal.jpg",
+    year: "2026",
+  },
+  {
+    title: "NCT Progress Tracker API",
+    tags: ["Node.js", "Express", "TypeScript", "Prisma", "PostgreSQL"],
     image: "/sound-wave-visualization-dark-theme.jpg",
-    year: "2023",
+    year: "2026",
+  },
+  {
+    title: "Healthcare Diagnosis Chatbot",
+    tags: ["MedBERT", "Flask API", "NLP", "MedQuAD"],
+    image: "/abstract-neural-network-visualization-dark-theme.jpg",
+    year: "2025",
+  },
+  {
+    title: "Peerlaw Legal Platform",
+    tags: ["React.js", "Tailwind CSS", "Frontend"],
+    image: "/abstract-memory-storage-visualization.jpg",
+    year: "2025",
   },
 ]
 
