@@ -75,7 +75,7 @@ export function Navbar() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
             </span>
-            <span className="font-mono text-xs tracking-wider text-muted-foreground">AVAILABLE FOR WORK — ABUJA, NIGERIA</span>
+            <span className="font-mono text-xs tracking-wider text-muted-foreground">AVAILABLE FOR WORK — ML & NLP SPECIALIST</span>
           </div>
 
           {/* Mobile Menu Button */}
@@ -135,7 +135,7 @@ export function Navbar() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
                 </span>
-                <span className="font-mono text-xs tracking-wider text-muted-foreground">AVAILABLE FOR WORK — ABUJA, NIGERIA</span>
+                <span className="font-mono text-xs tracking-wider text-muted-foreground">AVAILABLE FOR WORK — ML & NLP SPECIALIST</span>
               </motion.div>
             </nav>
           </motion.div>

@@ -4,11 +4,11 @@ import { useRef } from "react"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 
 const statements = [
-  "Computer Science graduate from Landmark University.",
-  "Founding Engineer & Team Lead architecting Next.js & TypeScript apps.",
-  "Hands-on experience in NLP, RAG architectures, and Transformer models.",
-  "Deploying AI-powered solutions via Flask & Node.js APIs.",
-  "Building intelligent interfaces that adapt and empower.",
+  "Machine Learning Developer at Neo Cloud Technologies specializing in NLP & Generative AI.",
+  "Architecting Multilingual RAG systems, LangChain chatbots, and Transformer models (BERT / MedBERT).",
+  "Engineered PhishGuard cybersecurity pipelines, Deepfake Audio/Vision detectors, and KITTI Tracking models.",
+  "Computer Science graduate from Landmark University skilled in PyTorch, Scikit-Learn, and Vector Databases.",
+  "Deploying production-ready ML architectures via Flask & Node.js microservices.",
 ]
 
 export function About() {
@@ -31,8 +31,8 @@ export function About() {
         transition={{ duration: 0.8 }}
         className="px-8 md:px-12 mb-0 py-20"
       >
-        <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-4">03 — PROFILE & PHILOSOPHY</p>
-        <h2 className="font-sans text-3xl md:text-5xl font-light italic">Computer Science Graduate & Developer</h2>
+        <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-4">03 — ML & NLP SPECIALIZATION</p>
+        <h2 className="font-sans text-3xl md:text-5xl font-light italic">Machine Learning & Natural Language Processing Specialist</h2>
       </motion.div>
 
       {/* Horizontal Scroll Container */}

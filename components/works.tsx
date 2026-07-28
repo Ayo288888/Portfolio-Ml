@@ -7,6 +7,18 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 
 const projects = [
   {
+    title: "Multilingual RAG Q&A Bot",
+    tags: ["LangChain", "RAG", "NLP", "Python", "Generative AI"],
+    image: "/abstract-memory-storage-visualization.jpg",
+    year: "2026",
+  },
+  {
+    title: "Healthcare Diagnosis Chatbot",
+    tags: ["MedBERT", "ClinicalBERT", "NLP", "Flask API"],
+    image: "/abstract-neural-network-visualization-dark-theme.jpg",
+    year: "2025",
+  },
+  {
     title: "PhishGuard: Phishing Detector",
     tags: ["Python", "XGBoost", "NLP", "Cybersecurity"],
     image: "/futuristic-data-dashboard-dark-minimal.jpg",
@@ -14,19 +26,13 @@ const projects = [
   },
   {
     title: "Deepfake Security System",
-    tags: ["PyTorch", "YOLO", "Wav2Vec2", "EfficientNet"],
+    tags: ["PyTorch", "Wav2Vec2", "YOLO", "Audio/Vision Forensics"],
     image: "/abstract-neural-network-visualization-dark-theme.jpg",
     year: "2026",
   },
   {
-    title: "Multilingual RAG Q&A Bot",
-    tags: ["LangChain", "RAG", "Python", "Next.js"],
-    image: "/abstract-memory-storage-visualization.jpg",
-    year: "2026",
-  },
-  {
     title: "KITTI Object Detection",
-    tags: ["PyTorch", "Faster R-CNN", "KITTI", "OpenCV"],
+    tags: ["PyTorch", "Faster R-CNN", "ResNet-50", "Computer Vision"],
     image: "/futuristic-data-dashboard-dark-minimal.jpg",
     year: "2026",
   },
@@ -35,12 +41,6 @@ const projects = [
     tags: ["Node.js", "Express", "TypeScript", "Prisma", "PostgreSQL"],
     image: "/sound-wave-visualization-dark-theme.jpg",
     year: "2026",
-  },
-  {
-    title: "Healthcare Diagnosis Chatbot",
-    tags: ["MedBERT", "Flask API", "NLP", "MedQuAD"],
-    image: "/abstract-neural-network-visualization-dark-theme.jpg",
-    year: "2025",
   },
   {
     title: "Peerlaw Legal Platform",

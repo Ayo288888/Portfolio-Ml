@@ -31,9 +31,9 @@ export function Hero() {
         >
           <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-2">01 — DISCIPLINE</p>
           <h2 className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-balance">
-            FRONT-END
+            MACHINE
             <br />
-            <span className="italic">DEVELOPER</span>
+            <span className="italic">LEARNING</span>
           </h2>
         </motion.div>
 
@@ -50,7 +50,7 @@ export function Hero() {
             whileTap={{ scale: 0.95 }}
             className="relative px-8 py-4 border border-white/20 rounded-full font-mono text-sm tracking-widest uppercase bg-transparent backdrop-blur-sm hover:bg-white hover:text-black transition-colors duration-500"
           >
-            Initialize CV
+            Explore AI
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#2563eb] rounded-full animate-pulse" />
           </motion.button>
         </motion.div>
@@ -64,9 +64,9 @@ export function Hero() {
         >
           <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-2">02 — SPECIALIZATION</p>
           <h2 className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-balance">
-            ARTIFICIAL
+            NATURAL LANGUAGE
             <br />
-            <span className="italic">INTELLIGENCE</span>
+            <span className="italic">PROCESSING</span>
           </h2>
         </motion.div>
       </motion.div>

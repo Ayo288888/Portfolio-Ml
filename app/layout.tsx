@@ -15,9 +15,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "AI-Native Product Builder | Portfolio",
-  description: "System Architect & Interface Designer crafting intelligent digital experiences",
-    generator: 'v0.app'
+  title: "Ilori Ayomide Wisdom | Machine Learning & NLP Specialist",
+  description: "Machine Learning Developer & Natural Language Processing (NLP) Specialist architecting RAG pipelines, Transformer models, and AI solutions.",
 }
 
 export const viewport: Viewport = {
