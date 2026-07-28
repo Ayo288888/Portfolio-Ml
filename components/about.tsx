@@ -4,11 +4,11 @@ import { useRef } from "react"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 
 const statements = [
-  "I build products that think alongside humans.",
-  "Design systems that adapt and evolve.",
-  "Interfaces should feel inevitable.",
-  "Every interaction is a conversation.",
-  "Code is just crystallized thought.",
+  "Computer Science graduate from Landmark University.",
+  "Founding Engineer & Team Lead architecting Next.js & TypeScript apps.",
+  "Hands-on experience in NLP, RAG architectures, and Transformer models.",
+  "Deploying AI-powered solutions via Flask & Node.js APIs.",
+  "Building intelligent interfaces that adapt and empower.",
 ]
 
 export function About() {
@@ -31,8 +31,8 @@ export function About() {
         transition={{ duration: 0.8 }}
         className="px-8 md:px-12 mb-0 py-20"
       >
-        <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-4">03 — PHILOSOPHY</p>
-        <h2 className="font-sans text-3xl md:text-5xl font-light italic">Stream of Consciousness</h2>
+        <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-4">03 — PROFILE & PHILOSOPHY</p>
+        <h2 className="font-sans text-3xl md:text-5xl font-light italic">Computer Science Graduate & Developer</h2>
       </motion.div>
 
       {/* Horizontal Scroll Container */}
