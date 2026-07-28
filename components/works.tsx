@@ -9,7 +9,7 @@ const projects = [
   {
     title: "Marginal: AI Research Paper Reader",
     tags: ["FastAPI", "Python", "NLP", "RAG", "Uvicorn"],
-    image: "/abstract-memory-storage-visualization.jpg",
+    image: "/previews/marginal-paper-reader.png",
     year: "2026",
     href: "https://marginal-paper-reader.onrender.com/",
   },
@@ -134,14 +134,14 @@ export function Works() {
           </motion.div>
         ))}
 
-        {/* Floating Image */}
+        {/* Floating Image Preview */}
         <motion.div
-          className="absolute pointer-events-none z-50 w-64 h-40 md:w-80 md:h-48 overflow-hidden rounded-lg"
+          className="absolute pointer-events-none z-50 w-72 h-48 md:w-96 md:h-60 overflow-hidden rounded-xl border border-white/20 bg-black/90 backdrop-blur-md shadow-2xl"
           style={{
             x: springX,
             y: springY,
             translateX: "-50%",
-            translateY: "-320%",
+            translateY: "-260%",
           }}
           animate={{
             opacity: hoveredIndex !== null ? 1 : 0,
@@ -150,20 +150,24 @@ export function Works() {
           transition={{ duration: 0.2 }}
         >
           {hoveredIndex !== null && (
-            <motion.img
-              src={projects[hoveredIndex].image}
-              alt={projects[hoveredIndex].title}
-              className="w-full h-full object-cover"
-              initial={{ scale: 1.2 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.4 }}
-              style={{
-                filter: "grayscale(50%) contrast(1.1)",
-              }}
-            />
+            <>
+              <motion.img
+                src={projects[hoveredIndex].image}
+                alt={projects[hoveredIndex].title}
+                className="w-full h-full object-cover object-top"
+                initial={{ scale: 1.1 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+              {projects[hoveredIndex].href && (
+                <div className="absolute top-3 right-3 z-10 bg-[#2563eb] text-white text-[10px] font-mono font-medium px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1">
+                  <span>LIVE SITE</span>
+                  <span>↗</span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+            </>
           )}
-          {/* Glitch overlay */}
-          <div className="absolute inset-0 bg-[#2563eb]/10 mix-blend-overlay" />
         </motion.div>
       </div>
 
