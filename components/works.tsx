@@ -16,14 +16,16 @@ const projects = [
   {
     title: "Healthcare Diagnosis Chatbot",
     tags: ["MedBERT", "ClinicalBERT", "NLP", "Flask API"],
-    image: "/abstract-neural-network-visualization-dark-theme.jpg",
+    image: "/previews/healthcare-chatbot-preview.png",
     year: "2025",
+    href: "https://avasoft-health.onrender.com/",
   },
   {
     title: "PhishGuard: Phishing Detector",
     tags: ["Python", "XGBoost", "NLP", "Cybersecurity"],
-    image: "/futuristic-data-dashboard-dark-minimal.jpg",
+    image: "/previews/phishguard-preview.png",
     year: "2026",
+    href: "https://phish-guard-ebon.vercel.app/",
   },
   {
     title: "Deepfake Security System",
@@ -44,10 +46,11 @@ const projects = [
     year: "2026",
   },
   {
-    title: "Peerlaw Legal Platform",
-    tags: ["React.js", "Tailwind CSS", "Frontend"],
-    image: "/abstract-memory-storage-visualization.jpg",
-    year: "2025",
+    title: "Transformer Sentiment Analysis",
+    tags: ["PyTorch", "BERT", "DistilBERT", "NLP", "Transformers"],
+    image: "/previews/sentiment-analysis-preview.png",
+    year: "2026",
+    href: "https://github.com/Ayo288888/sentiment_analysis",
   },
 ]
 
