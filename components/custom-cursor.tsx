@@ -18,12 +18,19 @@ export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 })
   const [isHovering, setIsHovering] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const sparksRef = useRef<Spark[]>([])
   const animFrameRef = useRef<number | null>(null)
   const sparkIdCounter = useRef(0)
 
   useEffect(() => {
+    // Detect touch device
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      setIsTouchDevice(true)
+      return
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX
       const y = e.clientY
@@ -40,14 +47,13 @@ export function CustomCursor() {
           x: x + (Math.random() - 0.5) * 6,
           y: y + (Math.random() - 0.5) * 6,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed + 0.2, // slight downward drift
+          vy: Math.sin(angle) * speed + 0.2,
           size: 1.2 + Math.random() * 2.2,
           alpha: 0.8 + Math.random() * 0.2,
           maxAlpha: 0.8 + Math.random() * 0.2,
         })
       }
 
-      // Limit particle count
       if (sparksRef.current.length > 80) {
         sparksRef.current = sparksRef.current.slice(-80)
       }
@@ -87,6 +93,8 @@ export function CustomCursor() {
 
   // Canvas render loop for stardust micro-sparks
   useEffect(() => {
+    if (isTouchDevice) return
+
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext("2d")
@@ -134,21 +142,21 @@ export function CustomCursor() {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
       window.removeEventListener("resize", resize)
     }
-  }, [])
+  }, [isTouchDevice])
 
-  if (!isVisible) return null
+  if (isTouchDevice || !isVisible) return null
 
   return (
     <>
       {/* Bioluminescent Stardust Burst Canvas */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[99997] w-full h-full"
+        className="fixed inset-0 pointer-events-none z-[99997] w-full h-full hidden md:block"
       />
 
       {/* Core Precision Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 bg-white rounded-full pointer-events-none z-[99999] shadow-[0_0_10px_rgba(255,255,255,0.9)]"
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-white rounded-full pointer-events-none z-[99999] shadow-[0_0_10px_rgba(255,255,255,0.9)] hidden md:block"
         animate={{
           x: position.x - 5,
           y: position.y - 5,
@@ -160,7 +168,7 @@ export function CustomCursor() {
 
       {/* Trailing Interactive Glass Ring */}
       <motion.div
-        className="fixed top-0 left-0 w-9 h-9 border border-white/50 rounded-full pointer-events-none z-[99998] bg-white/[0.03] backdrop-blur-[1px]"
+        className="fixed top-0 left-0 w-9 h-9 border border-white/50 rounded-full pointer-events-none z-[99998] bg-white/[0.03] backdrop-blur-[1px] hidden md:block"
         animate={{
           x: position.x - 18,
           y: position.y - 18,

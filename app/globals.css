@@ -3,9 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Hide default browser cursor across the entire site */
-html, body, a, button, input, select, textarea, [role="button"], [data-cursor-hover] {
-  cursor: none !important;
+/* Hide default browser cursor only on desktop devices with fine pointer controls */
+@media (pointer: fine) {
+  html, body, a, button, input, select, textarea, [role="button"], [data-cursor-hover] {
+    cursor: none !important;
+  }
 }
 
 /* Dark portfolio theme - using dark mode as default */

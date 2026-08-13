@@ -113,20 +113,20 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+            className="md:hidden relative z-[101] w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border border-white/10 bg-black/40 backdrop-blur-md"
             aria-label="Toggle menu"
           >
             <motion.span
-              animate={isMenuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-              className="w-6 h-px bg-foreground origin-center"
+              animate={isMenuOpen ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
+              className="w-5 h-0.5 bg-foreground origin-center"
             />
             <motion.span
               animate={isMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
-              className="w-6 h-px bg-foreground"
+              className="w-5 h-0.5 bg-foreground"
             />
             <motion.span
-              animate={isMenuOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-              className="w-6 h-px bg-foreground origin-center"
+              animate={isMenuOpen ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
+              className="w-5 h-0.5 bg-foreground origin-center"
             />
           </button>
         </nav>
@@ -140,32 +140,52 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-lg md:hidden"
+            className="fixed inset-0 z-[100] bg-background/98 backdrop-blur-2xl md:hidden"
           >
-            <nav className="flex flex-col items-center justify-center h-full gap-8">
+            <nav className="flex flex-col items-center justify-center h-full gap-8 px-6">
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: 0.05 }}
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  if (pathname === "/") {
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  } else {
+                    router.push("/")
+                  }
+                }}
+                className="group text-4xl font-sans tracking-tight text-foreground flex items-center"
+              >
+                <span className="text-accent font-mono text-sm mr-3">00</span>
+                <span>Home</span>
+              </motion.button>
+
               {navLinks.map((link, index) => (
                 <motion.button
                   key={link.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: (index + 1) * 0.08 }}
                   onClick={() => handleNavClick(link)}
-                  className="group text-4xl font-sans tracking-tight text-foreground"
+                  className="group text-4xl font-sans tracking-tight text-foreground flex items-center"
                 >
-                  <span className="text-accent font-mono text-sm mr-2">0{index + 1}</span>
-                  {link.label}
+                  <span className="text-accent font-mono text-sm mr-3">0{index + 1}</span>
+                  <span>{link.label}</span>
                 </motion.button>
               ))}
+
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-3 mt-8"
+                className="flex items-center gap-3 mt-12 p-3 px-5 rounded-full border border-white/10 bg-white/5"
               >
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
                 <span className="font-mono text-xs tracking-wider text-muted-foreground">AVAILABLE FOR WORK</span>
               </motion.div>

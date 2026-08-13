@@ -175,7 +175,8 @@ export function BranchWorks() {
 
         {/* Serpentine Organic SVG Tree Trunk Path (Desktop & Mobile) */}
         <div className="absolute inset-0 pointer-events-none z-0">
-          <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 2400">
+          {/* Desktop Serpentine Curve */}
+          <svg className="hidden md:block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 2400">
             <defs>
               <linearGradient id="trunkGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -227,6 +228,19 @@ export function BranchWorks() {
                 ease: "linear",
               }}
               className="opacity-90"
+            />
+          </svg>
+
+          {/* Mobile Straight Vertical Guide Line */}
+          <svg className="md:hidden w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 2400">
+            <line
+              x1="50"
+              y1="0"
+              x2="50"
+              y2="2400"
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="2"
+              strokeDasharray="8 8"
             />
           </svg>
         </div>
