@@ -14,12 +14,14 @@ function Sphere() {
     () => ({
       uTime: { value: 0 },
       uMouse: { value: [0, 0] },
+      uDistortion: { value: 0.15 },
     }),
     [],
   )
 
   const vertexShader = `
     uniform float uTime;
+    uniform float uDistortion;
     varying vec2 vUv;
     varying float vDisplacement;
     
@@ -77,8 +79,8 @@ function Sphere() {
     void main() {
       vUv = uv;
       
-      float noise = snoise(position * 1.5 + uTime * 0.15);
-      float displacement = noise * 0.15;
+      float noise = snoise(position * 1.5 + uTime * 0.2);
+      float displacement = noise * uDistortion;
       vDisplacement = displacement;
       
       vec3 newPosition = position + normal * displacement;
@@ -91,26 +93,48 @@ function Sphere() {
     varying float vDisplacement;
     
     void main() {
-      float intensity = 0.3 + vDisplacement * 2.0;
+      float intensity = 0.35 + vDisplacement * 2.2;
       vec3 color = vec3(intensity);
       
       float line = smoothstep(0.0, 0.02, abs(fract(vUv.x * 20.0) - 0.5));
       line *= smoothstep(0.0, 0.02, abs(fract(vUv.y * 20.0) - 0.5));
       
-      gl_FragColor = vec4(color * (1.0 - line * 0.5), 0.6);
+      gl_FragColor = vec4(color * (1.0 - line * 0.5), 0.7);
     }
   `
 
   useFrame((state, delta) => {
+    // Distance from pointer to center
+    const distToPointer = Math.sqrt(pointer.x * pointer.x + pointer.y * pointer.y)
+    // Proximity factor (1 when mouse is close, 0 when far)
+    const proximity = Math.max(0, 1 - distToPointer / 1.5)
+
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value += delta
       materialRef.current.uniforms.uMouse.value = [pointer.x, pointer.y]
+      // Dynamic noise distortion increases as pointer approaches
+      const targetDistortion = 0.15 + proximity * 0.35
+      materialRef.current.uniforms.uDistortion.value = MathUtils.lerp(
+        materialRef.current.uniforms.uDistortion.value,
+        targetDistortion,
+        0.1,
+      )
     }
 
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.05
-      meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, pointer.y * 0.2, 0.05)
-      meshRef.current.rotation.z = MathUtils.lerp(meshRef.current.rotation.z, pointer.x * 0.2, 0.05)
+      // Continuous gentle Y rotation
+      meshRef.current.rotation.y += delta * 0.08
+
+      // Repulsion: push sphere position opposite to pointer vector when close
+      const repulseX = -pointer.x * proximity * 0.85
+      const repulseY = -pointer.y * proximity * 0.85
+
+      meshRef.current.position.x = MathUtils.lerp(meshRef.current.position.x, repulseX, 0.08)
+      meshRef.current.position.y = MathUtils.lerp(meshRef.current.position.y, repulseY, 0.08)
+
+      // Dynamic 3D tilt away from pointer
+      meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, -pointer.y * 0.4, 0.08)
+      meshRef.current.rotation.z = MathUtils.lerp(meshRef.current.rotation.z, pointer.x * 0.4, 0.08)
     }
   })
 
