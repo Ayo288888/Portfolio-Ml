@@ -97,7 +97,7 @@ function Sphere() {
       float line = smoothstep(0.0, 0.02, abs(fract(vUv.x * 20.0) - 0.5));
       line *= smoothstep(0.0, 0.02, abs(fract(vUv.y * 20.0) - 0.5));
       
-      gl_FragColor = vec4(color * (1.0 - line * 0.5), 0.6);
+      gl_FragColor = vec4(color * (1.0 - line * 0.5), 0.65);
     }
   `
 
@@ -108,9 +108,19 @@ function Sphere() {
     }
 
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.05
-      meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, pointer.y * 0.2, 0.05)
-      meshRef.current.rotation.z = MathUtils.lerp(meshRef.current.rotation.z, pointer.x * 0.2, 0.05)
+      // Continuous Y rotation
+      meshRef.current.rotation.y += delta * 0.06
+
+      // Attraction: sphere position smoothly glides toward pointer [x, y]
+      const targetX = pointer.x * 1.6
+      const targetY = pointer.y * 1.6
+
+      meshRef.current.position.x = MathUtils.lerp(meshRef.current.position.x, targetX, 0.05)
+      meshRef.current.position.y = MathUtils.lerp(meshRef.current.position.y, targetY, 0.05)
+
+      // Smooth tilt towards cursor
+      meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, pointer.y * 0.3, 0.05)
+      meshRef.current.rotation.z = MathUtils.lerp(meshRef.current.rotation.z, -pointer.x * 0.3, 0.05)
     }
   })
 
