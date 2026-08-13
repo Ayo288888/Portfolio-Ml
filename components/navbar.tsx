@@ -1,17 +1,21 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Works", href: "#works" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/#about", targetId: "about" },
+  { label: "Works", href: "/works", targetId: "works" },
+  { label: "Contact", href: "/#contact", targetId: "contact" },
 ]
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,12 +25,27 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const scrollToSection = (href: string) => {
+  const handleNavClick = (link: (typeof navLinks)[number]) => {
     setIsMenuOpen(false)
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+
+    if (link.href === "/works") {
+      if (pathname === "/works") {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      } else {
+        router.push("/works")
+      }
+      return
     }
+
+    if (pathname === "/") {
+      const el = document.getElementById(link.targetId)
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" })
+        return
+      }
+    }
+
+    router.push(link.href)
   }
 
   return (
@@ -41,25 +60,29 @@ export function Navbar() {
       >
         <nav className="flex items-center justify-between px-6 py-4 my-0 md:px-12 md:py-5">
           {/* Logo */}
-          <a
-            href="#"
+          <Link
+            href="/"
             onClick={(e) => {
-              e.preventDefault()
-              window.scrollTo({ top: 0, behavior: "smooth" })
+              if (pathname === "/") {
+                e.preventDefault()
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }
             }}
             className="group flex items-center gap-2"
           >
             <span className="font-mono text-xs tracking-widest text-muted-foreground">ILORI AYOMIDE</span>
             <span className="w-1.5 h-1.5 rounded-full bg-accent group-hover:scale-150 transition-transform duration-300" />
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link, index) => (
               <li key={link.label}>
                 <button
-                  onClick={() => scrollToSection(link.href)}
-                  className="group relative font-mono text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300"
+                  onClick={() => handleNavClick(link)}
+                  className={`group relative font-mono text-xs tracking-wider transition-colors duration-300 ${
+                    pathname === link.href ? "text-white font-medium" : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   <span className="text-accent mr-1">0{index + 1}</span>
                   {link.label.toUpperCase()}
@@ -118,7 +141,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ delay: index * 0.1 }}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => handleNavClick(link)}
                   className="group text-4xl font-sans tracking-tight text-foreground"
                 >
                   <span className="text-accent font-mono text-sm mr-2">0{index + 1}</span>
