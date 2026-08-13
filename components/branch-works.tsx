@@ -399,7 +399,7 @@ export function BranchWorks() {
                 <div className="sticky top-0 z-20 flex items-center justify-between px-8 py-6 bg-[#09090b]/80 backdrop-blur-md border-b border-white/10">
                   <div className="flex items-center gap-3 font-mono text-xs">
                     <span className="px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white font-medium">
-                      LEAF NODE #{activeProject.id.toUpperCase()}
+                      {activeProject.id.toUpperCase()}
                     </span>
                     <span className="text-muted-foreground">{activeProject.year}</span>
                   </div>
@@ -422,7 +422,7 @@ export function BranchWorks() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-transparent to-black/30" />
                   {activeProject.metrics && (
                     <div className="absolute bottom-4 left-8 bg-black/90 border border-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full font-mono text-xs text-zinc-200 flex items-center gap-2 shadow-lg">
-                      <Sparkles className="w-3.5 h-3.5 text-white" />
+
                       <span>{activeProject.metrics}</span>
                     </div>
                   )}
