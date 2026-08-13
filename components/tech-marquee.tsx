@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
 
 const techItems = [
@@ -33,26 +32,14 @@ const concepts = [
   "DEEP LEARNING PIPELINES",
 ]
 
-function MarqueeRow({
-  items,
-  direction = "left",
-  isAccelerated = false,
-}: {
-  items: string[]
-  direction?: "left" | "right"
-  isAccelerated?: boolean
-}) {
+function MarqueeRow({ items, direction = "left" }: { items: string[]; direction?: "left" | "right" }) {
   const duplicatedItems = [...items, ...items, ...items, ...items]
 
   return (
     <div className="relative overflow-hidden py-4">
       <motion.div
         className={`flex gap-8 ${direction === "left" ? "animate-marquee-left" : "animate-marquee-right"}`}
-        style={{
-          width: "fit-content",
-          animationDuration: isAccelerated ? "18s" : "45s",
-          transition: "animation-duration 0.5s ease",
-        }}
+        style={{ width: "fit-content" }}
       >
         {duplicatedItems.map((item, index) => (
           <span
@@ -60,8 +47,16 @@ function MarqueeRow({
             className="group font-sans text-5xl md:text-7xl lg:text-8xl font-light tracking-tight whitespace-nowrap cursor-default"
             style={{
               WebkitTextStroke: "1px rgba(255,255,255,0.3)",
-              color: isAccelerated ? "white" : "transparent",
-              transition: "all 0.4s ease",
+              color: "transparent",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "white"
+              e.currentTarget.style.webkitTextStroke = "none"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "transparent"
+              e.currentTarget.style.webkitTextStroke = "1px rgba(255,255,255,0.3)"
             }}
           >
             {item}
@@ -74,32 +69,23 @@ function MarqueeRow({
 }
 
 export function TechMarquee() {
-  const [isSectionHovered, setIsSectionHovered] = useState(false)
-
   return (
-    <section
-      onMouseEnter={() => setIsSectionHovered(true)}
-      onMouseLeave={() => setIsSectionHovered(false)}
-      className="relative py-24 overflow-hidden md:py-32 cursor-pointer"
-    >
+    <section className="relative py-24 overflow-hidden md:py-32">
       {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="px-8 md:px-12 mb-16 flex items-center justify-between"
+        className="px-8 md:px-12 mb-16"
       >
-        <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground">05 — ML & NLP SPECIALIZATION</p>
-        <span className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase">
-          {isSectionHovered ? "AUTOMATIC FAST MOTION ACTIVE" : "HOVER TO ACCELERATE MARQUEE"}
-        </span>
+        <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-4">05 — TECHNICAL ARSENAL</p>
       </motion.div>
 
       {/* Marquee Rows */}
       <div className="space-y-4">
-        <MarqueeRow items={techItems} direction="left" isAccelerated={isSectionHovered} />
-        <MarqueeRow items={concepts} direction="right" isAccelerated={isSectionHovered} />
+        <MarqueeRow items={techItems} direction="left" />
+        <MarqueeRow items={concepts} direction="right" />
       </div>
     </section>
   )
