@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { ArrowUpRight, ExternalLink } from "lucide-react"
 
@@ -9,6 +10,9 @@ export function Footer() {
   const [time, setTime] = useState("")
   const [isCollabHovered, setIsCollabHovered] = useState(false)
   const [isFrontendHovered, setIsFrontendHovered] = useState(false)
+  const pathname = usePathname()
+
+  const isContactPage = pathname === "/contact"
 
   useEffect(() => {
     const updateTime = () => {
@@ -27,50 +31,52 @@ export function Footer() {
 
   return (
     <footer id="contact" className="relative bg-[#050505] border-t border-white/10">
-      {/* Primary CTA 1: Let's Collaborate (Links to /contact) */}
-      <Link
-        href="/contact"
-        data-cursor-hover
-        className="relative block overflow-hidden border-b border-white/10"
-        onMouseEnter={() => setIsCollabHovered(true)}
-        onMouseLeave={() => setIsCollabHovered(false)}
-      >
-        {/* Background Curtain */}
-        <motion.div
-          className="absolute inset-0 bg-[#2563eb]"
-          initial={{ y: "100%" }}
-          animate={{ y: isCollabHovered ? "0%" : "100%" }}
-          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        />
+      {/* Primary CTA 1: Let's Collaborate (Hidden on /contact page) */}
+      {!isContactPage && (
+        <Link
+          href="/contact"
+          data-cursor-hover
+          className="relative block overflow-hidden border-b border-white/10"
+          onMouseEnter={() => setIsCollabHovered(true)}
+          onMouseLeave={() => setIsCollabHovered(false)}
+        >
+          {/* Background Curtain */}
+          <motion.div
+            className="absolute inset-0 bg-[#2563eb]"
+            initial={{ y: "100%" }}
+            animate={{ y: isCollabHovered ? "0%" : "100%" }}
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
 
-        {/* Content */}
-        <div className="relative py-16 md:py-24 px-8 md:px-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div>
-              <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-3 uppercase">06 — GET IN TOUCH</p>
-              <motion.h2
-                className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-center md:text-left"
+          {/* Content */}
+          <div className="relative py-16 md:py-24 px-8 md:px-12">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <div>
+                <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-3 uppercase">06 — GET IN TOUCH</p>
+                <motion.h2
+                  className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-center md:text-left"
+                  animate={{
+                    color: isCollabHovered ? "#050505" : "#fafafa",
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Let's <span className="italic">Collaborate</span>
+                </motion.h2>
+              </div>
+
+              <motion.div
                 animate={{
+                  rotate: isCollabHovered ? 45 : 0,
                   color: isCollabHovered ? "#050505" : "#fafafa",
                 }}
                 transition={{ duration: 0.3 }}
               >
-                Let's <span className="italic">Collaborate</span>
-              </motion.h2>
+                <ArrowUpRight className="w-12 h-12 md:w-16 md:h-16" />
+              </motion.div>
             </div>
-
-            <motion.div
-              animate={{
-                rotate: isCollabHovered ? 45 : 0,
-                color: isCollabHovered ? "#050505" : "#fafafa",
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              <ArrowUpRight className="w-12 h-12 md:w-16 md:h-16" />
-            </motion.div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      )}
 
       {/* Secondary CTA 2: View My Frontend Portfolio */}
       <a
@@ -94,7 +100,9 @@ export function Footer() {
         <div className="relative py-14 md:py-20 px-8 md:px-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-3 uppercase">07 — EXPLORE MORE</p>
+              <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground mb-3 uppercase">
+                {isContactPage ? "06 — EXPLORE MORE" : "07 — EXPLORE MORE"}
+              </p>
               <motion.h3
                 className="font-sans text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-center md:text-left"
                 animate={{
