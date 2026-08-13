@@ -8,14 +8,144 @@ import { PROJECTS, type Project } from "@/lib/projects-data"
 
 const categories = ["All", "AI & NLP", "Security", "Computer Vision", "Full-Stack"] as const
 
-// Ambient floating particles along the tree trunk
-const floatingParticles = [
-  { id: 1, left: "48%", top: "15%", duration: 7, delay: 0 },
-  { id: 2, left: "52%", top: "30%", duration: 9, delay: 1.5 },
-  { id: 3, left: "47%", top: "50%", duration: 8, delay: 0.8 },
-  { id: 4, left: "53%", top: "70%", duration: 10, delay: 2.2 },
-  { id: 5, left: "49%", top: "85%", duration: 6, delay: 3 },
-]
+interface Particle {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  size: number
+  alpha: number
+  baseAlpha: number
+  branchTargetX?: number
+  branchTargetY?: number
+  isBranching?: boolean
+  life: number
+  maxLife: number
+}
+
+function TreeParticleCanvas({ hoveredId }: { hoveredId: string | null }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    let animationFrameId: number
+    let particles: Particle[] = []
+
+    const resize = () => {
+      const parent = canvas.parentElement
+      if (!parent) return
+      canvas.width = parent.clientWidth
+      canvas.height = parent.clientHeight
+    }
+
+    resize()
+    const resizeObserver = new ResizeObserver(resize)
+    if (canvas.parentElement) {
+      resizeObserver.observe(canvas.parentElement)
+    }
+
+    const initParticles = () => {
+      particles = []
+      const particleCount = Math.min(180, Math.floor(canvas.height / 15))
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(createTrunkParticle(canvas.width, canvas.height, true))
+      }
+    }
+
+    function createTrunkParticle(width: number, height: number, randomY = false): Particle {
+      const centerX = width / 2
+      return {
+        x: centerX + (Math.random() - 0.5) * 16,
+        y: randomY ? Math.random() * height : -10,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: 1.2 + Math.random() * 1.8,
+        size: 1.2 + Math.random() * 2.2,
+        alpha: 0.2 + Math.random() * 0.7,
+        baseAlpha: 0.2 + Math.random() * 0.7,
+        life: 0,
+        maxLife: 200 + Math.random() * 300,
+      }
+    }
+
+    initParticles()
+
+    let time = 0
+    const render = () => {
+      time += 0.02
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      const centerX = canvas.width / 2
+
+      // Draw Central Trunk Light Glow Line
+      ctx.save()
+      ctx.beginPath()
+      ctx.moveTo(centerX, 0)
+      ctx.lineTo(centerX, canvas.height)
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)"
+      ctx.lineWidth = 2
+      ctx.stroke()
+
+      // Glow overlay line
+      ctx.beginPath()
+      ctx.moveTo(centerX, 0)
+      ctx.lineTo(centerX, canvas.height)
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)"
+      ctx.lineWidth = 8
+      ctx.shadowColor = "#ffffff"
+      ctx.shadowBlur = 12
+      ctx.stroke()
+      ctx.restore()
+
+      // Update & Draw Particles
+      particles.forEach((p, index) => {
+        p.life++
+        p.y += p.vy
+        p.x += Math.sin(time + p.y * 0.01) * 0.6 + p.vx
+
+        // Keep near central trunk unless branching
+        if (!p.isBranching) {
+          const dx = centerX - p.x
+          p.x += dx * 0.05
+        }
+
+        // Draw particle with glow
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`
+        ctx.shadowColor = "#ffffff"
+        ctx.shadowBlur = p.size * 4
+        ctx.fill()
+        ctx.restore()
+
+        // Respawn when reaching bottom or maxLife
+        if (p.y > canvas.height + 20 || p.life > p.maxLife) {
+          particles[index] = createTrunkParticle(canvas.width, canvas.height)
+        }
+      })
+
+      animationFrameId = requestAnimationFrame(render)
+    }
+
+    render()
+
+    return () => {
+      cancelAnimationFrame(animationFrameId)
+      resizeObserver.disconnect()
+    }
+  }, [hoveredId])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none z-0 w-full h-full"
+    />
+  )
+}
 
 export function BranchWorks() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
@@ -114,29 +244,10 @@ export function BranchWorks() {
 
       {/* Main Organic Tree Container */}
       <div ref={treeContainerRef} className="relative max-w-6xl mx-auto py-12">
-        {/* Floating Light Particles Drifting Along the Trunk */}
-        <div className="absolute inset-0 pointer-events-none z-10 hidden md:block">
-          {floatingParticles.map((p) => (
-            <motion.div
-              key={p.id}
-              style={{ left: p.left, top: p.top }}
-              animate={{
-                y: [-20, -100],
-                opacity: [0, 0.8, 0],
-                scale: [0.6, 1.2, 0.6],
-              }}
-              transition={{
-                duration: p.duration,
-                repeat: Infinity,
-                delay: p.delay,
-                ease: "easeInOut",
-              }}
-              className="absolute w-2 h-2 rounded-full bg-white blur-[1px] shadow-[0_0_10px_rgba(255,255,255,0.8)]"
-            />
-          ))}
-        </div>
+        {/* Interactive 2D Canvas Particle Stream Flowing Down Trunk */}
+        <TreeParticleCanvas hoveredId={hoveredId} />
 
-        {/* SVG Dynamic Central Trunk & Branch Flowing Animations (Desktop & Mobile) */}
+        {/* SVG Dynamic Connecting Branches (Desktop & Mobile) */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <svg className="w-full h-full" preserveAspectRatio="none">
             <defs>
@@ -155,18 +266,6 @@ export function BranchWorks() {
               </filter>
             </defs>
 
-            {/* Background Dashed Trunk Line */}
-            <motion.line
-              x1="50%"
-              y1="0"
-              x2="50%"
-              y2="100%"
-              stroke="url(#trunkGradient)"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-              className="hidden md:block opacity-30"
-            />
-
             {/* Scroll-Driven Organic Central Trunk Line */}
             <motion.line
               x1="50%"
@@ -174,48 +273,12 @@ export function BranchWorks() {
               x2="50%"
               y2="100%"
               stroke="url(#trunkGradient)"
-              strokeWidth="2.5"
+              strokeWidth="3"
               filter="url(#whiteGlow)"
               style={{
                 pathLength: smoothProgress,
               }}
               className="hidden md:block"
-            />
-
-            {/* Flowing Animated Pulse Light Traveling Down Central Trunk */}
-            <motion.line
-              x1="50%"
-              y1="0"
-              x2="50%"
-              y2="100%"
-              stroke="#ffffff"
-              strokeWidth="3.5"
-              strokeDasharray="20 120"
-              filter="url(#whiteGlow)"
-              animate={{
-                strokeDashoffset: [0, -280],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="hidden md:block opacity-80"
-            />
-
-            {/* Left Mobile Trunk Line */}
-            <motion.line
-              x1="24"
-              y1="0"
-              x2="24"
-              y2="100%"
-              stroke="url(#trunkGradient)"
-              strokeWidth="2"
-              filter="url(#whiteGlow)"
-              style={{
-                pathLength: smoothProgress,
-              }}
-              className="block md:hidden"
             />
           </svg>
         </div>
@@ -250,8 +313,8 @@ export function BranchWorks() {
                           : `M 50% 50% C 65% 50%, 70% 50%, 75% 50%`
                       }
                       fill="none"
-                      stroke={isHovered ? "url(#activeBranchGrad)" : "rgba(255,255,255,0.2)"}
-                      strokeWidth={isHovered ? "2.5" : "1.5"}
+                      stroke={isHovered ? "url(#activeBranchGrad)" : "rgba(255,255,255,0.3)"}
+                      strokeWidth={isHovered ? "3" : "2"}
                       strokeDasharray="6 8"
                       animate={{
                         strokeDashoffset: [0, -28],
@@ -271,28 +334,28 @@ export function BranchWorks() {
                   {/* Continuous Breathing Ring Aura */}
                   <motion.span
                     animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.2, 0.6, 0.2],
+                      scale: [1, 1.6, 1],
+                      opacity: [0.3, 0.8, 0.3],
                     }}
                     transition={{
                       duration: 3,
                       repeat: Infinity,
                       delay: index * 0.3,
                     }}
-                    className="absolute -inset-2 rounded-full border border-white/50 pointer-events-none"
+                    className="absolute -inset-3 rounded-full border border-white/60 pointer-events-none"
                   />
 
                   <motion.button
                     onClick={() => setActiveProject(project)}
                     animate={{
-                      scale: isHovered ? 1.35 : 1,
+                      scale: isHovered ? 1.4 : 1,
                     }}
                     transition={{ type: "spring", stiffness: 300 }}
-                    className="relative w-6 h-6 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.4)] group"
+                    className="relative w-7 h-7 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.6)] group"
                   >
-                    <span className="w-2 h-2 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
                     {isHovered && (
-                      <span className="animate-ping absolute inset-0 rounded-full bg-white/50" />
+                      <span className="animate-ping absolute inset-0 rounded-full bg-white/60" />
                     )}
                   </motion.button>
                 </div>
