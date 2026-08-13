@@ -9,21 +9,14 @@ import { PROJECTS, type Project } from "@/lib/projects-data"
 const categories = ["All", "AI & NLP", "Security", "Computer Vision", "Full-Stack"] as const
 
 interface Particle {
-  x: number
-  y: number
-  vx: number
-  vy: number
+  t: number
+  speed: number
   size: number
   alpha: number
-  baseAlpha: number
-  branchTargetX?: number
-  branchTargetY?: number
-  isBranching?: boolean
-  life: number
-  maxLife: number
+  offset: number
 }
 
-function TreeParticleCanvas({ hoveredId }: { hoveredId: string | null }) {
+function WindingTreeParticleCanvas({ pathRef }: { pathRef: React.RefObject<SVGPathElement | null> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -33,7 +26,7 @@ function TreeParticleCanvas({ hoveredId }: { hoveredId: string | null }) {
     if (!ctx) return
 
     let animationFrameId: number
-    let particles: Particle[] = []
+    const particles: Particle[] = []
 
     const resize = () => {
       const parent = canvas.parentElement
@@ -48,85 +41,41 @@ function TreeParticleCanvas({ hoveredId }: { hoveredId: string | null }) {
       resizeObserver.observe(canvas.parentElement)
     }
 
-    const initParticles = () => {
-      particles = []
-      const particleCount = Math.min(180, Math.floor(canvas.height / 15))
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(createTrunkParticle(canvas.width, canvas.height, true))
-      }
-    }
-
-    function createTrunkParticle(width: number, height: number, randomY = false): Particle {
-      const centerX = width / 2
-      return {
-        x: centerX + (Math.random() - 0.5) * 16,
-        y: randomY ? Math.random() * height : -10,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: 1.2 + Math.random() * 1.8,
-        size: 1.2 + Math.random() * 2.2,
-        alpha: 0.2 + Math.random() * 0.7,
-        baseAlpha: 0.2 + Math.random() * 0.7,
-        life: 0,
-        maxLife: 200 + Math.random() * 300,
-      }
-    }
-
-    initParticles()
-
-    let time = 0
-    const render = () => {
-      time += 0.02
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      const centerX = canvas.width / 2
-
-      // Draw Central Trunk Light Glow Line
-      ctx.save()
-      ctx.beginPath()
-      ctx.moveTo(centerX, 0)
-      ctx.lineTo(centerX, canvas.height)
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)"
-      ctx.lineWidth = 2
-      ctx.stroke()
-
-      // Glow overlay line
-      ctx.beginPath()
-      ctx.moveTo(centerX, 0)
-      ctx.lineTo(centerX, canvas.height)
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)"
-      ctx.lineWidth = 8
-      ctx.shadowColor = "#ffffff"
-      ctx.shadowBlur = 12
-      ctx.stroke()
-      ctx.restore()
-
-      // Update & Draw Particles
-      particles.forEach((p, index) => {
-        p.life++
-        p.y += p.vy
-        p.x += Math.sin(time + p.y * 0.01) * 0.6 + p.vx
-
-        // Keep near central trunk unless branching
-        if (!p.isBranching) {
-          const dx = centerX - p.x
-          p.x += dx * 0.05
-        }
-
-        // Draw particle with glow
-        ctx.save()
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`
-        ctx.shadowColor = "#ffffff"
-        ctx.shadowBlur = p.size * 4
-        ctx.fill()
-        ctx.restore()
-
-        // Respawn when reaching bottom or maxLife
-        if (p.y > canvas.height + 20 || p.life > p.maxLife) {
-          particles[index] = createTrunkParticle(canvas.width, canvas.height)
-        }
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        t: Math.random(),
+        speed: 0.0008 + Math.random() * 0.0012,
+        size: 1.5 + Math.random() * 2.5,
+        alpha: 0.3 + Math.random() * 0.7,
+        offset: (Math.random() - 0.5) * 12,
       })
+    }
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const pathEl = pathRef.current
+
+      if (pathEl && pathEl.getTotalLength) {
+        const pathLength = pathEl.getTotalLength()
+
+        particles.forEach((p) => {
+          p.t += p.speed
+          if (p.t > 1) p.t = 0
+
+          const point = pathEl.getPointAtLength(p.t * pathLength)
+          const px = point.x + p.offset
+          const py = point.y
+
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(px, py, p.size, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`
+          ctx.shadowColor = "#ffffff"
+          ctx.shadowBlur = p.size * 4
+          ctx.fill()
+          ctx.restore()
+        })
+      }
 
       animationFrameId = requestAnimationFrame(render)
     }
@@ -137,7 +86,7 @@ function TreeParticleCanvas({ hoveredId }: { hoveredId: string | null }) {
       cancelAnimationFrame(animationFrameId)
       resizeObserver.disconnect()
     }
-  }, [hoveredId])
+  }, [pathRef])
 
   return (
     <canvas
@@ -155,6 +104,7 @@ export function BranchWorks() {
 
   const sectionRef = useRef<HTMLDivElement>(null)
   const treeContainerRef = useRef<HTMLDivElement>(null)
+  const windingPathRef = useRef<SVGPathElement>(null)
 
   // Scroll progress for drawing the organic SVG trunk & branches
   const { scrollYProgress } = useScroll({
@@ -211,7 +161,7 @@ export function BranchWorks() {
             </h1>
           </div>
           <p className="font-mono text-xs text-muted-foreground max-w-sm leading-relaxed">
-            Scroll down to explore project leaves growing off the central neural branch network. Click any node to inspect system details.
+            Scroll down to explore project leaves growing off the central serpentine branch network. Click any node to inspect system details.
           </p>
         </motion.div>
 
@@ -244,41 +194,67 @@ export function BranchWorks() {
 
       {/* Main Organic Tree Container */}
       <div ref={treeContainerRef} className="relative max-w-6xl mx-auto py-12">
-        {/* Interactive 2D Canvas Particle Stream Flowing Down Trunk */}
-        <TreeParticleCanvas hoveredId={hoveredId} />
+        {/* Interactive Particle Stream Flowing Along Winding Serpentine Path */}
+        <WindingTreeParticleCanvas pathRef={windingPathRef} />
 
-        {/* SVG Dynamic Connecting Branches (Desktop & Mobile) */}
+        {/* Serpentine Organic SVG Tree Trunk Path (Desktop & Mobile) */}
         <div className="absolute inset-0 pointer-events-none z-0">
-          <svg className="w-full h-full" preserveAspectRatio="none">
+          <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 2400">
             <defs>
               <linearGradient id="trunkGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#e4e4e7" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#71717a" stopOpacity="0.5" />
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#e4e4e7" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#71717a" stopOpacity="0.6" />
               </linearGradient>
               <linearGradient id="activeBranchGrad" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stopColor="#ffffff" />
                 <stop offset="100%" stopColor="#a1a1aa" />
               </linearGradient>
               <filter id="whiteGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                <feGaussianBlur stdDeviation="3" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
             </defs>
 
-            {/* Scroll-Driven Organic Central Trunk Line */}
-            <motion.line
-              x1="50%"
-              y1="0"
-              x2="50%"
-              y2="100%"
+            {/* Background Faint Guide Path */}
+            <path
+              d="M 500 0 C 250 150, 220 300, 240 380 C 270 480, 750 500, 760 680 C 770 820, 220 850, 240 980 C 260 1120, 750 1150, 760 1280 C 770 1420, 220 1450, 240 1580 C 260 1720, 750 1750, 760 1880 C 770 2020, 220 2050, 240 2180 C 260 2300, 500 2380, 500 2400"
+              fill="none"
+              stroke="rgba(255,255,255,0.15)"
+              strokeWidth="2"
+              strokeDasharray="6 6"
+            />
+
+            {/* Scroll-Driven Winding Organic Serpentine Trunk Line */}
+            <motion.path
+              ref={windingPathRef}
+              d="M 500 0 C 250 150, 220 300, 240 380 C 270 480, 750 500, 760 680 C 770 820, 220 850, 240 980 C 260 1120, 750 1150, 760 1280 C 770 1420, 220 1450, 240 1580 C 260 1720, 750 1750, 760 1880 C 770 2020, 220 2050, 240 2180 C 260 2300, 500 2380, 500 2400"
+              fill="none"
               stroke="url(#trunkGradient)"
-              strokeWidth="3"
+              strokeWidth="4.5"
               filter="url(#whiteGlow)"
               style={{
                 pathLength: smoothProgress,
               }}
-              className="hidden md:block"
+            />
+
+            {/* Continuous Flowing Animated Energy Light Stream */}
+            <motion.path
+              d="M 500 0 C 250 150, 220 300, 240 380 C 270 480, 750 500, 760 680 C 770 820, 220 850, 240 980 C 260 1120, 750 1150, 760 1280 C 770 1420, 220 1450, 240 1580 C 260 1720, 750 1750, 760 1880 C 770 2020, 220 2050, 240 2180 C 260 2300, 500 2380, 500 2400"
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="5.5"
+              strokeDasharray="25 140"
+              filter="url(#whiteGlow)"
+              animate={{
+                strokeDashoffset: [0, -330],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="opacity-90"
             />
           </svg>
         </div>
@@ -303,34 +279,12 @@ export function BranchWorks() {
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Connecting Curved Flowing Branch SVG (Desktop) */}
-                <div className="absolute inset-0 pointer-events-none hidden md:block">
-                  <svg className="w-full h-full overflow-visible">
-                    <motion.path
-                      d={
-                        isLeft
-                          ? `M 50% 50% C 35% 50%, 30% 50%, 25% 50%`
-                          : `M 50% 50% C 65% 50%, 70% 50%, 75% 50%`
-                      }
-                      fill="none"
-                      stroke={isHovered ? "url(#activeBranchGrad)" : "rgba(255,255,255,0.3)"}
-                      strokeWidth={isHovered ? "3" : "2"}
-                      strokeDasharray="6 8"
-                      animate={{
-                        strokeDashoffset: [0, -28],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                      filter={isHovered ? "url(#whiteGlow)" : undefined}
-                    />
-                  </svg>
-                </div>
-
-                {/* Central Leaf Node Animated Pulse Dot (Desktop) */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-20">
+                {/* Branch Connector Apex Pulse Dot (Desktop) */}
+                <div
+                  className={`absolute top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-20 ${
+                    isLeft ? "left-[24%]" : "right-[24%]"
+                  }`}
+                >
                   {/* Continuous Breathing Ring Aura */}
                   <motion.span
                     animate={{
@@ -351,7 +305,7 @@ export function BranchWorks() {
                       scale: isHovered ? 1.4 : 1,
                     }}
                     transition={{ type: "spring", stiffness: 300 }}
-                    className="relative w-7 h-7 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.6)] group"
+                    className="relative w-7 h-7 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.7)] group"
                   >
                     <span className="w-2.5 h-2.5 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
                     {isHovered && (
