@@ -136,7 +136,6 @@ export function ContactForm() {
           className="mb-16 pb-8 border-b border-white/10"
         >
           <div className="flex items-center gap-2 font-mono text-xs tracking-[0.3em] text-zinc-400 mb-3 uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-white" />
             <span>05 — GET IN TOUCH</span>
           </div>
           <h1 className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight mb-4">
@@ -294,7 +293,7 @@ export function ContactForm() {
             className="space-y-8"
           >
             <div>
-              <h3 className="font-sans text-2xl font-light text-white mb-4">Direct Touchpoints</h3>
+              <h3 className="font-sans text-2xl font-light text-white mb-4">Lets Collaborate</h3>
               <p className="font-mono text-xs text-muted-foreground leading-relaxed">
                 Whether you're looking to build an intelligent AI system, scale a full-stack platform, or discuss innovative ideas, I'm available to collaborate.
               </p>
