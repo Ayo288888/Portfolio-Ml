@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Mail, Phone, MapPin, Send, Linkedin, Github, Sparkles, CheckCircle2, AlertCircle } from "lucide-react"
+import { Mail, Phone, MapPin, Send, Linkedin, Github, Sparkles, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react"
 import emailjs from "@emailjs/browser"
 
 export function ContactForm() {
@@ -16,6 +16,18 @@ export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState("")
+
+  const publicKey = "d2HifzYa8UyshPnn2"
+  const serviceId = "service_9w8wbmi"
+  const templateId = "template_sqlf2a9"
+
+  useEffect(() => {
+    try {
+      emailjs.init(publicKey)
+    } catch (e) {
+      console.warn("EmailJS init warning:", e)
+    }
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -31,29 +43,41 @@ export function ContactForm() {
     setIsSubmitting(true)
     setError("")
 
-    const serviceId = "service_9w8wbmi"
-    const templateId = "template_sqlf2a9"
-    const publicKey = "d2HifzYa8UyshPnn2"
-
     const templateParams = {
       from_name: formData.name,
+      name: formData.name,
       from_email: formData.email,
+      email: formData.email,
+      reply_to: formData.email,
+      user_email: formData.email,
       subject: formData.subject,
       message: formData.message,
+      to_email: "wisdomilori0@gmail.com",
     }
 
     try {
-      await emailjs.send(serviceId, templateId, templateParams, publicKey)
+      // Send using EmailJS options object for v4 compatibility
+      const response = await emailjs.send(serviceId, templateId, templateParams, {
+        publicKey: publicKey,
+      })
 
+      if (response.status === 200 || response.text === "OK") {
+        setIsSubmitting(false)
+        setIsSubmitted(true)
+        setFormData({ name: "", email: "", subject: "", message: "" })
+        setTimeout(() => setIsSubmitted(false), 6000)
+      } else {
+        throw new Error(response.text || `EmailJS returned status ${response.status}`)
+      }
+    } catch (err: any) {
+      console.error("EmailJS Send Failed:", err)
       setIsSubmitting(false)
-      setIsSubmitted(true)
-      setFormData({ name: "", email: "", subject: "", message: "" })
-
-      setTimeout(() => setIsSubmitted(false), 6000)
-    } catch (err) {
-      console.error("FAILED...", err)
-      setIsSubmitting(false)
-      setError("Failed to send message. Please try again.")
+      const detailMsg = err?.text || err?.message || (typeof err === "string" ? err : "")
+      setError(
+        detailMsg
+          ? `EmailJS Error: ${detailMsg}. You can also email wisdomilori0@gmail.com directly.`
+          : "Failed to send message via EmailJS. Please try emailing wisdomilori0@gmail.com directly."
+      )
     }
   }
 
@@ -90,6 +114,12 @@ export function ContactForm() {
       href: "https://github.com/Ayo288888",
     },
   ]
+
+  const mailtoFallbackUrl = `mailto:wisdomilori0@gmail.com?subject=${encodeURIComponent(
+    formData.subject || "Portfolio Contact Inquiry"
+  )}&body=${encodeURIComponent(
+    `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+  )}`
 
   return (
     <section className="relative min-h-screen pt-32 pb-36 px-6 md:px-12 bg-background text-foreground overflow-hidden">
@@ -147,13 +177,21 @@ export function ContactForm() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 font-mono text-xs flex items-center gap-3"
+                className="mb-6 p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 font-mono text-xs flex flex-col gap-2"
               >
-                <AlertCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-white">Error Sending Message</p>
-                  <p className="text-rose-300/80">{error}</p>
+                <div className="flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+                  <p className="font-semibold text-white">Message Notice</p>
                 </div>
+                <p className="text-rose-300/80">{error}</p>
+                <a
+                  href={mailtoFallbackUrl}
+                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] transition-colors w-fit"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Send via Email Client</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </motion.div>
             )}
 
@@ -231,7 +269,7 @@ export function ContactForm() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 rounded-xl bg-white text-black font-mono text-xs font-semibold tracking-wider hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,255,255,0.15)] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 rounded-xl bg-white text-black font-mono text-xs font-semibold tracking-wider hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,255,255,0.15)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
