@@ -206,10 +206,6 @@ export function BranchWorks() {
                 <stop offset="50%" stopColor="#e4e4e7" stopOpacity="0.85" />
                 <stop offset="100%" stopColor="#71717a" stopOpacity="0.6" />
               </linearGradient>
-              <linearGradient id="activeBranchGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="100%" stopColor="#a1a1aa" />
-              </linearGradient>
               <filter id="whiteGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -279,44 +275,9 @@ export function BranchWorks() {
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Branch Connector Apex Pulse Dot (Desktop) */}
-                <div
-                  className={`absolute top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-20 ${
-                    isLeft ? "left-[24%]" : "right-[24%]"
-                  }`}
-                >
-                  {/* Continuous Breathing Ring Aura */}
-                  <motion.span
-                    animate={{
-                      scale: [1, 1.6, 1],
-                      opacity: [0.3, 0.8, 0.3],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      delay: index * 0.3,
-                    }}
-                    className="absolute -inset-3 rounded-full border border-white/60 pointer-events-none"
-                  />
-
-                  <motion.button
-                    onClick={() => setActiveProject(project)}
-                    animate={{
-                      scale: isHovered ? 1.4 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="relative w-7 h-7 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.7)] group"
-                  >
-                    <span className="w-2.5 h-2.5 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
-                    {isHovered && (
-                      <span className="animate-ping absolute inset-0 rounded-full bg-white/60" />
-                    )}
-                  </motion.button>
-                </div>
-
                 {/* Left Side Content (Desktop: Alternate) */}
                 <div
-                  className={`w-full md:w-[45%] pl-12 md:pl-0 ${
+                  className={`w-full md:w-[45%] ${
                     isLeft ? "md:text-right md:order-1" : "md:order-3"
                   }`}
                 >
@@ -324,13 +285,6 @@ export function BranchWorks() {
                     onClick={() => setActiveProject(project)}
                     className="group relative p-6 md:p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-md transition-all duration-500 cursor-pointer shadow-lg hover:border-white/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.08)]"
                   >
-                    {/* Mobile Leaf Dot */}
-                    <div className="absolute -left-9 top-8 md:hidden flex items-center justify-center">
-                      <span className="w-4 h-4 rounded-full border-2 border-white bg-background flex items-center justify-center">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                      </span>
-                    </div>
-
                     {/* Meta info header */}
                     <div
                       className={`flex items-center gap-3 font-mono text-[11px] text-muted-foreground mb-3 ${
