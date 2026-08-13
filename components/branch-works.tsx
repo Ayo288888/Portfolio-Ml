@@ -8,94 +8,6 @@ import { PROJECTS, type Project } from "@/lib/projects-data"
 
 const categories = ["All", "AI & NLP", "Security", "Computer Vision", "Full-Stack"] as const
 
-interface Particle {
-  t: number
-  speed: number
-  size: number
-  alpha: number
-  offset: number
-}
-
-function WindingTreeParticleCanvas({ pathRef }: { pathRef: React.RefObject<SVGPathElement | null> }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-    const particles: Particle[] = []
-
-    const resize = () => {
-      const parent = canvas.parentElement
-      if (!parent) return
-      canvas.width = parent.clientWidth
-      canvas.height = parent.clientHeight
-    }
-
-    resize()
-    const resizeObserver = new ResizeObserver(resize)
-    if (canvas.parentElement) {
-      resizeObserver.observe(canvas.parentElement)
-    }
-
-    for (let i = 0; i < 90; i++) {
-      particles.push({
-        t: Math.random(),
-        speed: 0.0008 + Math.random() * 0.0012,
-        size: 1.5 + Math.random() * 2.5,
-        alpha: 0.3 + Math.random() * 0.7,
-        offset: (Math.random() - 0.5) * 12,
-      })
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const pathEl = pathRef.current
-
-      if (pathEl && pathEl.getTotalLength) {
-        const pathLength = pathEl.getTotalLength()
-
-        particles.forEach((p) => {
-          p.t += p.speed
-          if (p.t > 1) p.t = 0
-
-          const point = pathEl.getPointAtLength(p.t * pathLength)
-          const px = point.x + p.offset
-          const py = point.y
-
-          ctx.save()
-          ctx.beginPath()
-          ctx.arc(px, py, p.size, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`
-          ctx.shadowColor = "#ffffff"
-          ctx.shadowBlur = p.size * 4
-          ctx.fill()
-          ctx.restore()
-        })
-      }
-
-      animationFrameId = requestAnimationFrame(render)
-    }
-
-    render()
-
-    return () => {
-      cancelAnimationFrame(animationFrameId)
-      resizeObserver.disconnect()
-    }
-  }, [pathRef])
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none z-0 w-full h-full"
-    />
-  )
-}
-
 export function BranchWorks() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
   const [activeProject, setActiveProject] = useState<Project | null>(null)
@@ -194,9 +106,6 @@ export function BranchWorks() {
 
       {/* Main Organic Tree Container */}
       <div ref={treeContainerRef} className="relative max-w-6xl mx-auto py-12">
-        {/* Interactive Particle Stream Flowing Along Winding Serpentine Path */}
-        <WindingTreeParticleCanvas pathRef={windingPathRef} />
-
         {/* Serpentine Organic SVG Tree Trunk Path (Desktop & Mobile) */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 2400">
@@ -205,10 +114,6 @@ export function BranchWorks() {
                 <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
                 <stop offset="50%" stopColor="#e4e4e7" stopOpacity="0.85" />
                 <stop offset="100%" stopColor="#71717a" stopOpacity="0.6" />
-              </linearGradient>
-              <linearGradient id="activeBranchGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="100%" stopColor="#a1a1aa" />
               </linearGradient>
               <filter id="whiteGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
@@ -237,25 +142,6 @@ export function BranchWorks() {
                 pathLength: smoothProgress,
               }}
             />
-
-            {/* Continuous Flowing Animated Energy Light Stream */}
-            <motion.path
-              d="M 500 0 C 250 150, 220 300, 240 380 C 270 480, 750 500, 760 680 C 770 820, 220 850, 240 980 C 260 1120, 750 1150, 760 1280 C 770 1420, 220 1450, 240 1580 C 260 1720, 750 1750, 760 1880 C 770 2020, 220 2050, 240 2180 C 260 2300, 500 2380, 500 2400"
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="5.5"
-              strokeDasharray="25 140"
-              filter="url(#whiteGlow)"
-              animate={{
-                strokeDashoffset: [0, -330],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="opacity-90"
-            />
           </svg>
         </div>
 
@@ -279,38 +165,21 @@ export function BranchWorks() {
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Branch Connector Apex Pulse Dot (Desktop) */}
+                {/* Branch Connector Apex Node (Desktop) */}
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-20 ${
                     isLeft ? "left-[24%]" : "right-[24%]"
                   }`}
                 >
-                  {/* Continuous Breathing Ring Aura */}
-                  <motion.span
-                    animate={{
-                      scale: [1, 1.6, 1],
-                      opacity: [0.3, 0.8, 0.3],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      delay: index * 0.3,
-                    }}
-                    className="absolute -inset-3 rounded-full border border-white/60 pointer-events-none"
-                  />
-
                   <motion.button
                     onClick={() => setActiveProject(project)}
                     animate={{
-                      scale: isHovered ? 1.4 : 1,
+                      scale: isHovered ? 1.3 : 1,
                     }}
                     transition={{ type: "spring", stiffness: 300 }}
-                    className="relative w-7 h-7 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.7)] group"
+                    className="relative w-6 h-6 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.4)] group"
                   >
-                    <span className="w-2.5 h-2.5 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
-                    {isHovered && (
-                      <span className="animate-ping absolute inset-0 rounded-full bg-white/60" />
-                    )}
+                    <span className="w-2 h-2 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
                   </motion.button>
                 </div>
 
