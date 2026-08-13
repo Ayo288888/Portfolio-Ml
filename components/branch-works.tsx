@@ -165,30 +165,7 @@ export function BranchWorks() {
           </p>
         </motion.div>
 
-        {/* Category Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-wrap items-center gap-2 pt-6"
-        >
-          <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mr-2">
-            <Filter className="w-3.5 h-3.5" />
-            <span>FILTER BY:</span>
-          </div>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`font-mono text-xs px-4 py-1.5 rounded-full border transition-all duration-300 ${selectedCategory === cat
-                ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)] font-semibold"
-                : "border-white/10 text-muted-foreground hover:border-white/30 hover:text-white"
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </motion.div>
+
       </div>
 
       {/* Main Organic Tree Container */}

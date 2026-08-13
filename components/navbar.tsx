@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 const navLinks = [
   { label: "About", href: "/#about", targetId: "about" },
   { label: "Works", href: "/works", targetId: "works" },
-  { label: "Contact", href: "/#contact", targetId: "contact" },
+  { label: "Contact", href: "/contact", targetId: "contact" },
 ]
 
 export function Navbar() {
@@ -33,6 +33,15 @@ export function Navbar() {
         window.scrollTo({ top: 0, behavior: "smooth" })
       } else {
         router.push("/works")
+      }
+      return
+    }
+
+    if (link.href === "/contact") {
+      if (pathname === "/contact") {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      } else {
+        router.push("/contact")
       }
       return
     }
