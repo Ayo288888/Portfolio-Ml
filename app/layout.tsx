@@ -17,10 +17,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Ilori Ayomide Wisdom | Machine Learning & NLP Specialist",
   description: "Machine Learning Developer & Natural Language Processing (NLP) Specialist architecting RAG pipelines, Transformer models, and AI solutions.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#1a1a1a",
+  themeColor: "#050505",
 }
 
 export default function RootLayout({
