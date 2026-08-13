@@ -3,28 +3,54 @@
 import { useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
 
-interface Point {
+interface Spark {
+  id: number
   x: number
   y: number
+  vx: number
+  vy: number
+  size: number
+  alpha: number
+  maxAlpha: number
 }
 
 export function CustomCursor() {
-  const [position, setPosition] = useState<Point>({ x: -100, y: -100 })
-  const [trail, setTrail] = useState<Point[]>([])
+  const [position, setPosition] = useState({ x: -100, y: -100 })
   const [isHovering, setIsHovering] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-  const requestRef = useRef<number | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const sparksRef = useRef<Spark[]>([])
+  const animFrameRef = useRef<number | null>(null)
+  const sparkIdCounter = useRef(0)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const newPoint = { x: e.clientX, y: e.clientY }
-      setPosition(newPoint)
+      const x = e.clientX
+      const y = e.clientY
+      setPosition({ x, y })
       if (!isVisible) setIsVisible(true)
 
-      setTrail((prev) => {
-        const updated = [newPoint, ...prev.slice(0, 16)]
-        return updated
-      })
+      // Spawn stardust sparks on mouse movement
+      const count = isHovering ? 4 : 2
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2
+        const speed = 0.4 + Math.random() * 1.6
+        sparksRef.current.push({
+          id: sparkIdCounter.current++,
+          x: x + (Math.random() - 0.5) * 6,
+          y: y + (Math.random() - 0.5) * 6,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed + 0.2, // slight downward drift
+          size: 1.2 + Math.random() * 2.2,
+          alpha: 0.8 + Math.random() * 0.2,
+          maxAlpha: 0.8 + Math.random() * 0.2,
+        })
+      }
+
+      // Limit particle count
+      if (sparksRef.current.length > 80) {
+        sparksRef.current = sparksRef.current.slice(-80)
+      }
     }
 
     const handleMouseEnter = () => setIsVisible(true)
@@ -56,49 +82,69 @@ export function CustomCursor() {
       document.removeEventListener("mouseleave", handleMouseLeave)
       document.removeEventListener("mouseover", handleHoverStart)
       document.removeEventListener("mouseout", handleHoverEnd)
-      if (requestRef.current) cancelAnimationFrame(requestRef.current)
     }
-  }, [isVisible])
+  }, [isVisible, isHovering])
 
-  // Construct a smooth Catmull-Rom / Quad Bezier SVG path string from trail points
-  const getSvgPathString = () => {
-    if (trail.length < 2) return ""
-    let path = `M ${trail[0].x} ${trail[0].y}`
-    for (let i = 1; i < trail.length - 1; i++) {
-      const xc = (trail[i].x + trail[i + 1].x) / 2
-      const yc = (trail[i].y + trail[i + 1].y) / 2
-      path += ` Q ${trail[i].x} ${trail[i].y}, ${xc} ${yc}`
+  // Canvas render loop for stardust micro-sparks
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
     }
-    return path
-  }
+    resize()
+    window.addEventListener("resize", resize)
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      for (let i = sparksRef.current.length - 1; i >= 0; i--) {
+        const s = sparksRef.current[i]
+        s.x += s.vx
+        s.y += s.vy
+        s.vx *= 0.95
+        s.vy *= 0.95
+        s.alpha -= 0.022
+
+        if (s.alpha <= 0) {
+          sparksRef.current.splice(i, 1)
+          continue
+        }
+
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc(s.x, s.y, s.size * (s.alpha / s.maxAlpha), 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`
+        ctx.shadowColor = "#ffffff"
+        ctx.shadowBlur = s.size * 3
+        ctx.fill()
+        ctx.restore()
+      }
+
+      animFrameRef.current = requestAnimationFrame(render)
+    }
+
+    render()
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
+      window.removeEventListener("resize", resize)
+    }
+  }, [])
 
   if (!isVisible) return null
 
   return (
     <>
-      {/* Fluid SVG Line Ribbon Trail */}
-      <svg className="fixed inset-0 pointer-events-none z-[99997] w-full h-full">
-        <defs>
-          <linearGradient id="cursorTrailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#e4e4e7" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-          </linearGradient>
-          <filter id="trailGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="1.5" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
-        <path
-          d={getSvgPathString()}
-          fill="none"
-          stroke="url(#cursorTrailGradient)"
-          strokeWidth={isHovering ? "3" : "2"}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          filter="url(#trailGlow)"
-        />
-      </svg>
+      {/* Bioluminescent Stardust Burst Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-[99997] w-full h-full"
+      />
 
       {/* Core Precision Dot */}
       <motion.div
