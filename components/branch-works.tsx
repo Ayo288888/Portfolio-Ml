@@ -8,6 +8,15 @@ import { PROJECTS, type Project } from "@/lib/projects-data"
 
 const categories = ["All", "AI & NLP", "Security", "Computer Vision", "Full-Stack"] as const
 
+// Ambient floating particles along the tree trunk
+const floatingParticles = [
+  { id: 1, left: "48%", top: "15%", duration: 7, delay: 0 },
+  { id: 2, left: "52%", top: "30%", duration: 9, delay: 1.5 },
+  { id: 3, left: "47%", top: "50%", duration: 8, delay: 0.8 },
+  { id: 4, left: "53%", top: "70%", duration: 10, delay: 2.2 },
+  { id: 5, left: "49%", top: "85%", duration: 6, delay: 3 },
+]
+
 export function BranchWorks() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
   const [activeProject, setActiveProject] = useState<Project | null>(null)
@@ -105,7 +114,29 @@ export function BranchWorks() {
 
       {/* Main Organic Tree Container */}
       <div ref={treeContainerRef} className="relative max-w-6xl mx-auto py-12">
-        {/* SVG Dynamic Central Trunk Line (Desktop & Mobile) */}
+        {/* Floating Light Particles Drifting Along the Trunk */}
+        <div className="absolute inset-0 pointer-events-none z-10 hidden md:block">
+          {floatingParticles.map((p) => (
+            <motion.div
+              key={p.id}
+              style={{ left: p.left, top: p.top }}
+              animate={{
+                y: [-20, -100],
+                opacity: [0, 0.8, 0],
+                scale: [0.6, 1.2, 0.6],
+              }}
+              transition={{
+                duration: p.duration,
+                repeat: Infinity,
+                delay: p.delay,
+                ease: "easeInOut",
+              }}
+              className="absolute w-2 h-2 rounded-full bg-white blur-[1px] shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+            />
+          ))}
+        </div>
+
+        {/* SVG Dynamic Central Trunk & Branch Flowing Animations (Desktop & Mobile) */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <svg className="w-full h-full" preserveAspectRatio="none">
             <defs>
@@ -124,7 +155,7 @@ export function BranchWorks() {
               </filter>
             </defs>
 
-            {/* Central Vertical Trunk Line */}
+            {/* Background Dashed Trunk Line */}
             <motion.line
               x1="50%"
               y1="0"
@@ -135,6 +166,8 @@ export function BranchWorks() {
               strokeDasharray="4 4"
               className="hidden md:block opacity-30"
             />
+
+            {/* Scroll-Driven Organic Central Trunk Line */}
             <motion.line
               x1="50%"
               y1="0"
@@ -147,6 +180,27 @@ export function BranchWorks() {
                 pathLength: smoothProgress,
               }}
               className="hidden md:block"
+            />
+
+            {/* Flowing Animated Pulse Light Traveling Down Central Trunk */}
+            <motion.line
+              x1="50%"
+              y1="0"
+              x2="50%"
+              y2="100%"
+              stroke="#ffffff"
+              strokeWidth="3.5"
+              strokeDasharray="20 120"
+              filter="url(#whiteGlow)"
+              animate={{
+                strokeDashoffset: [0, -280],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="hidden md:block opacity-80"
             />
 
             {/* Left Mobile Trunk Line */}
@@ -186,7 +240,7 @@ export function BranchWorks() {
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Connecting Curved Branch SVG (Desktop) */}
+                {/* Connecting Curved Flowing Branch SVG (Desktop) */}
                 <div className="absolute inset-0 pointer-events-none hidden md:block">
                   <svg className="w-full h-full overflow-visible">
                     <motion.path
@@ -196,27 +250,49 @@ export function BranchWorks() {
                           : `M 50% 50% C 65% 50%, 70% 50%, 75% 50%`
                       }
                       fill="none"
-                      stroke={isHovered ? "url(#activeBranchGrad)" : "rgba(255,255,255,0.15)"}
+                      stroke={isHovered ? "url(#activeBranchGrad)" : "rgba(255,255,255,0.2)"}
                       strokeWidth={isHovered ? "2.5" : "1.5"}
+                      strokeDasharray="6 8"
+                      animate={{
+                        strokeDashoffset: [0, -28],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
                       filter={isHovered ? "url(#whiteGlow)" : undefined}
-                      transition={{ duration: 0.3 }}
                     />
                   </svg>
                 </div>
 
-                {/* Central Leaf Node Pulse Dot (Desktop) */}
+                {/* Central Leaf Node Animated Pulse Dot (Desktop) */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-20">
+                  {/* Continuous Breathing Ring Aura */}
+                  <motion.span
+                    animate={{
+                      scale: [1, 1.5, 1],
+                      opacity: [0.2, 0.6, 0.2],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: index * 0.3,
+                    }}
+                    className="absolute -inset-2 rounded-full border border-white/50 pointer-events-none"
+                  />
+
                   <motion.button
                     onClick={() => setActiveProject(project)}
                     animate={{
                       scale: isHovered ? 1.35 : 1,
                     }}
                     transition={{ type: "spring", stiffness: 300 }}
-                    className="relative w-6 h-6 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.3)] group"
+                    className="relative w-6 h-6 rounded-full bg-background border-2 border-white flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.4)] group"
                   >
                     <span className="w-2 h-2 rounded-full bg-white group-hover:bg-zinc-200 transition-colors" />
                     {isHovered && (
-                      <span className="animate-ping absolute inset-0 rounded-full bg-white/40" />
+                      <span className="animate-ping absolute inset-0 rounded-full bg-white/50" />
                     )}
                   </motion.button>
                 </div>
