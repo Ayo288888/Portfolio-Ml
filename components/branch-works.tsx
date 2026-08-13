@@ -153,15 +153,15 @@ export function BranchWorks() {
         >
           <div>
             <div className="flex items-center gap-2 font-mono text-xs tracking-[0.3em] text-zinc-400 mb-3 uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-white" />
-              <span>04 — PORTFOLIO ARBOR</span>
+
+              <span>04 — PORTFOLIO </span>
             </div>
             <h1 className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight">
-              Selected <span className="italic font-normal">Works & Branches</span>
+              My <span className="italic font-normal">Works</span>
             </h1>
           </div>
           <p className="font-mono text-xs text-muted-foreground max-w-sm leading-relaxed">
-            Scroll down to explore project leaves growing off the central serpentine branch network. Click any node to inspect system details.
+            Scroll down to explore all my projects. Click any node to inspect each project's details.
           </p>
         </motion.div>
 
@@ -180,11 +180,10 @@ export function BranchWorks() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`font-mono text-xs px-4 py-1.5 rounded-full border transition-all duration-300 ${
-                selectedCategory === cat
-                  ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)] font-semibold"
-                  : "border-white/10 text-muted-foreground hover:border-white/30 hover:text-white"
-              }`}
+              className={`font-mono text-xs px-4 py-1.5 rounded-full border transition-all duration-300 ${selectedCategory === cat
+                ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)] font-semibold"
+                : "border-white/10 text-muted-foreground hover:border-white/30 hover:text-white"
+                }`}
             >
               {cat}
             </button>
@@ -269,17 +268,15 @@ export function BranchWorks() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.7, delay: index * 0.1 }}
-                className={`relative flex flex-col md:flex-row items-center justify-between gap-8 transition-opacity duration-500 ${
-                  isFilteredOut ? "opacity-20 grayscale pointer-events-none" : "opacity-100"
-                }`}
+                className={`relative flex flex-col md:flex-row items-center justify-between gap-8 transition-opacity duration-500 ${isFilteredOut ? "opacity-20 grayscale pointer-events-none" : "opacity-100"
+                  }`}
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
                 {/* Left Side Content (Desktop: Alternate) */}
                 <div
-                  className={`w-full md:w-[45%] ${
-                    isLeft ? "md:text-right md:order-1" : "md:order-3"
-                  }`}
+                  className={`w-full md:w-[45%] ${isLeft ? "md:text-right md:order-1" : "md:order-3"
+                    }`}
                 >
                   <div
                     onClick={() => setActiveProject(project)}
@@ -287,9 +284,8 @@ export function BranchWorks() {
                   >
                     {/* Meta info header */}
                     <div
-                      className={`flex items-center gap-3 font-mono text-[11px] text-muted-foreground mb-3 ${
-                        isLeft ? "md:justify-end" : "justify-start"
-                      }`}
+                      className={`flex items-center gap-3 font-mono text-[11px] text-muted-foreground mb-3 ${isLeft ? "md:justify-end" : "justify-start"
+                        }`}
                     >
                       <span className="px-2.5 py-0.5 rounded-full border border-white/15 bg-white/10 text-white font-medium">
                         {project.year}
@@ -310,9 +306,8 @@ export function BranchWorks() {
 
                     {/* Tech Tags */}
                     <div
-                      className={`flex flex-wrap gap-1.5 ${
-                        isLeft ? "md:justify-end" : "justify-start"
-                      }`}
+                      className={`flex flex-wrap gap-1.5 ${isLeft ? "md:justify-end" : "justify-start"
+                        }`}
                     >
                       {project.tags.map((tag) => (
                         <span
@@ -326,11 +321,10 @@ export function BranchWorks() {
 
                     {/* Action Indicator */}
                     <div
-                      className={`mt-6 pt-4 border-t border-white/10 flex items-center gap-2 font-mono text-[11px] text-zinc-300 font-medium group-hover:text-white transition-colors ${
-                        isLeft ? "md:justify-end" : "justify-start"
-                      }`}
+                      className={`mt-6 pt-4 border-t border-white/10 flex items-center gap-2 font-mono text-[11px] text-zinc-300 font-medium group-hover:text-white transition-colors ${isLeft ? "md:justify-end" : "justify-start"
+                        }`}
                     >
-                      <span>INSPECT PROJECT LEAF</span>
+                      <span>INSPECT PROJECT</span>
                       <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </div>
                   </div>

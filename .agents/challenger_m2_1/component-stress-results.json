@@ -1,0 +1,30 @@
+[
+  {
+    "testName": "Fallback leafConfig generation",
+    "pass": true,
+    "details": "Generated startScroll=0, endScroll=0.11, side=left"
+  },
+  {
+    "testName": "Fallback leafConfig for idx 1 (Right side)",
+    "pass": true,
+    "details": "Generated startScroll=0.12, endScroll=0.22999999999999998, side=right"
+  },
+  {
+    "testName": "Click Hit Detection within 28px threshold (P1)",
+    "pass": true,
+    "details": "Clicked (375, 202) -> Target P1 (374, 200). Result: proj-1"
+  },
+  {
+    "testName": "Click Miss outside threshold (>28px)",
+    "pass": true,
+    "details": "Clicked (300, 200) dist=74px -> Result: null"
+  },
+  {
+    "testName": "Click with empty projects array",
+    "pass": true
+  },
+  {
+    "testName": "Click with 0x0 container dimension",
+    "pass": true
+  }
+]

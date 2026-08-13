@@ -1,0 +1,118 @@
+[
+  {
+    "suite": "Math Properties",
+    "testName": "t=0 start point P0",
+    "pass": true,
+    "details": "res.p0=(100,100), res.p3=(100,100) vs P0=(100,100)"
+  },
+  {
+    "suite": "Math Properties",
+    "testName": "t=1 end point P3",
+    "pass": true,
+    "details": "res.p3=(400,200) vs P3=(400,200)"
+  },
+  {
+    "suite": "Math Properties",
+    "testName": "Q3 lies on original cubic Bezier curve for t in (0,1)",
+    "pass": true,
+    "details": "Max error across 20,000 evaluations: 4.0990e-13"
+  },
+  {
+    "suite": "Math Properties",
+    "testName": "t out-of-bounds clamping (-0.5 -> 0, 5.0 -> 1)",
+    "pass": true,
+    "details": "subNeg.p3=(100,100), subHuge.p3=(400,200)"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S < 0 (S = -0.5)",
+    "pass": true,
+    "details": "bProgress=0, trunkY=40 (expected 0 and 40)"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S = 0",
+    "pass": true,
+    "details": "bProgress=0, trunkY=40 (expected 0 and 40)"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S = 0.2 (Mid-branch)",
+    "pass": true,
+    "details": "bProgress=0.5000000000000001 (expected 0.5)"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S = 0.3 (endScroll)",
+    "pass": true,
+    "details": "bProgress=1 (expected 1.0)"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S > 1 (S = 1.5)",
+    "pass": true,
+    "details": "bProgress=1, trunkY=1000 (expected 1.0 and 1000)"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S = Infinity & -Infinity",
+    "pass": true,
+    "details": "bProgressInf=1, bProgressNegInf=0"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "S = NaN safety check",
+    "pass": false,
+    "details": "bProgressNaN=NaN, trunkYNaN=NaN. NOTE: NaN produces NaN in Math.max(0, Math.min(1, NaN))"
+  },
+  {
+    "suite": "Scroll Edge Cases",
+    "testName": "startScroll === endScroll (Zero range)",
+    "pass": true,
+    "details": "bProgressZeroRange=1"
+  },
+  {
+    "suite": "Responsive Layout",
+    "testName": "Desktop Left Branch (w=1024)",
+    "pass": true,
+    "details": "X_trunk=512, X3=382.976 (expected 382.976)"
+  },
+  {
+    "suite": "Responsive Layout",
+    "testName": "Desktop Right Branch (w=1024)",
+    "pass": true,
+    "details": "X3=641.024 (expected 641.024)"
+  },
+  {
+    "suite": "Responsive Layout",
+    "testName": "Mobile Left-to-Right Branch (w=375)",
+    "pass": true,
+    "details": "X_trunk=32, X3=120.5 (expected 120.5)"
+  },
+  {
+    "suite": "Responsive Layout",
+    "testName": "Mobile Narrow Screen Clamping (w=100)",
+    "pass": true,
+    "details": "X3=64 (expected 64 clamped minimum)"
+  },
+  {
+    "suite": "Throttling",
+    "testName": "Initial null prev emits",
+    "pass": true
+  },
+  {
+    "suite": "Throttling",
+    "testName": "Micro movement suppresses emit",
+    "pass": true
+  },
+  {
+    "suite": "Throttling",
+    "testName": "X shift > 0.5px triggers emit",
+    "pass": true
+  },
+  {
+    "suite": "Throttling",
+    "testName": "Active boolean flip triggers emit",
+    "pass": true
+  }
+]
