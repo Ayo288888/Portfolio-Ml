@@ -92,7 +92,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "kitti-detection",
-    title: "KITTI Object Detection",
+    title: "Object Detection",
     subtitle: "Autonomous perception using Faster R-CNN & ResNet-50",
     category: "Computer Vision",
     tags: ["PyTorch", "Faster R-CNN", "ResNet-50", "Computer Vision"],
@@ -107,6 +107,7 @@ export const PROJECTS: Project[] = [
       "CUDA Accelerated Inference Pipeline",
     ],
     metrics: "High-mAP Autonomous Perception",
+    href: "https://colab.research.google.com/drive/1LKgaoh4rq3qIScK_-YH52c5qENmStNF_",
   },
 
   {

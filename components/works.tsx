@@ -35,10 +35,11 @@ const projects = [
     href: "https://iris-rust-five.vercel.app/",
   },
   {
-    title: "KITTI Object Detection",
+    title: "Object Detection",
     tags: ["PyTorch", "Faster R-CNN", "ResNet-50", "Computer Vision"],
     image: "/futuristic-data-dashboard-dark-minimal.jpg",
     year: "2026",
+    href: "https://colab.research.google.com/drive/1LKgaoh4rq3qIScK_-YH52c5qENmStNF_",
   },
 
   {

@@ -165,16 +165,17 @@ export const PROJECTS_DATA: Project[] = [
   },
   {
     id: "kitti-object-detection",
-    title: "KITTI Object Detection",
+    title: "Object Detection",
     category: "Computer Vision",
     year: "2026",
     shortDescription:
-      "Autonomous vehicle 3D bounding box object detector and tracking system trained on the KITTI vision benchmark.",
+      "Production 2D/3D object detection model trained on the KITTI dataset using Faster R-CNN & ResNet-50 backbone.",
     longDescription:
       "A high-performance computer vision pipeline implemented in PyTorch for autonomous vehicle perception. Utilizing Faster R-CNN with a ResNet-50 Feature Pyramid Network (FPN) backbone, the model identifies vehicles, pedestrians, and cyclists under complex lighting and weather variations. Includes bounding box regression, NMS optimization, and multi-object tracking logic.",
     tags: ["PyTorch", "Faster R-CNN", "ResNet-50", "Computer Vision", "OpenCV", "Python"],
     image: "/futuristic-data-dashboard-dark-minimal.jpg",
-    githubUrl: "https://github.com/Ayo288888/kitti-object-detection",
+    demoUrl: "https://colab.research.google.com/drive/1LKgaoh4rq3qIScK_-YH52c5qENmStNF_",
+    githubUrl: "https://colab.research.google.com/drive/1LKgaoh4rq3qIScK_-YH52c5qENmStNF_",
     metrics: [
       { label: "mAP@0.50", value: "88.7%" },
       { label: "Inference Speed", value: "32 FPS" },
