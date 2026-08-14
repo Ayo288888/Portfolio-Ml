@@ -108,24 +108,7 @@ export const PROJECTS: Project[] = [
     ],
     metrics: "High-mAP Autonomous Perception",
   },
-  {
-    id: "nct-tracker",
-    title: "NCT Progress Tracker API",
-    subtitle: "High-throughput clinical trial analytics microservice",
-    category: "Full-Stack",
-    tags: ["Node.js", "Express", "TypeScript", "Prisma", "PostgreSQL"],
-    image: "/sound-wave-visualization-dark-theme.jpg",
-    year: "2026",
-    description:
-      "High-performance backend API engine for clinical trial tracking, built with Node.js, Express, TypeScript, Prisma ORM, and PostgreSQL with robust data validation and analytical query endpoints.",
-    architecture: [
-      "TypeScript & Express Microservice Architecture",
-      "Prisma ORM with Type-Safe Queries",
-      "PostgreSQL Relational Database with Indexed Schemas",
-      "Zod API Input Validation Middleware",
-    ],
-    metrics: "High-Throughput Enterprise Backend",
-  },
+
   {
     id: "sentiment-analysis",
     title: "Transformer Sentiment Analysis",

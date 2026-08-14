@@ -40,12 +40,7 @@ const projects = [
     image: "/futuristic-data-dashboard-dark-minimal.jpg",
     year: "2026",
   },
-  {
-    title: "NCT Progress Tracker API",
-    tags: ["Node.js", "Express", "TypeScript", "Prisma", "PostgreSQL"],
-    image: "/sound-wave-visualization-dark-theme.jpg",
-    year: "2026",
-  },
+
   {
     title: "Transformer Sentiment Analysis",
     tags: ["PyTorch", "BERT", "DistilBERT", "NLP", "Transformers"],

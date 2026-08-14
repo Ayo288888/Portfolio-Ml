@@ -194,37 +194,7 @@ export const PROJECTS_DATA: Project[] = [
       accentColor: "#8b5cf6",
     },
   },
-  {
-    id: "nct-progress-tracker-api",
-    title: "NCT Progress Tracker API",
-    category: "Backend Microservices",
-    year: "2026",
-    shortDescription:
-      "Production microservice backend built with Node.js, Express, and Prisma ORM for tracking ML model development progress.",
-    longDescription:
-      "A robust scalable REST backend microservice built for Neo Cloud Technologies to track machine learning experiments, dataset versions, and training run metrics. Engineered with Node.js, Express, TypeScript, and Prisma ORM backed by PostgreSQL. Features JWT authentication, role-based access control (RBAC), and automated database migrations.",
-    tags: ["Node.js", "Express", "TypeScript", "Prisma", "PostgreSQL", "REST API"],
-    image: "/sound-wave-visualization-dark-theme.jpg",
-    githubUrl: "https://github.com/Ayo288888/nct-progress-tracker-api",
-    metrics: [
-      { label: "Uptime", value: "99.99%" },
-      { label: "API Latency", value: "< 15ms" },
-      { label: "Req Throughput", value: "2.5K/sec" },
-    ],
-    highlights: [
-      "Designed type-safe database schemas and complex relation queries using Prisma ORM.",
-      "Implemented connection pooling and Redis caching for ultra-low latency response times.",
-      "Configured comprehensive unit and integration test coverage with Jest and Supertest.",
-    ],
-    leafConfig: {
-      startScroll: 0.7,
-      endScroll: 0.81,
-      side: "right",
-      xOffsetPct: 28,
-      yOffsetPct: 80,
-      accentColor: "#06b6d4",
-    },
-  },
+
   {
     id: "transformer-sentiment-analysis",
     title: "Transformer Sentiment Analysis",
