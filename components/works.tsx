@@ -28,10 +28,11 @@ const projects = [
     href: "https://phish-guard-ebon.vercel.app/",
   },
   {
-    title: "Deepfake Security System",
+    title: "TruthLens: Deepfake Security System",
     tags: ["PyTorch", "Wav2Vec2", "YOLO", "Audio/Vision Forensics"],
-    image: "/abstract-neural-network-visualization-dark-theme.jpg",
+    image: "/previews/truthlens-preview.png",
     year: "2026",
+    href: "https://iris-rust-five.vercel.app/",
   },
   {
     title: "KITTI Object Detection",
